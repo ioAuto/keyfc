@@ -97,7 +97,7 @@ func main() {
 		Date:      time.Now(),
 		Yesterday: num,
 	})
-	b, err := json.Marshal(records)
+	b, err := json.MarshalIndent(records, "", "\t")
 	if err != nil {
 		logrus.Fatal(err)
 	}
