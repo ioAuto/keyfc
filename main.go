@@ -58,7 +58,7 @@ func timeSeries(records []*Record) chart.TimeSeries {
 	return ts
 }
 
-func DrawChart(path string,records []*Record) error {
+func DrawChart(path string, records []*Record) error {
 	graph := chart.Chart{
 		Series: []chart.Series{
 			timeSeries(records),
@@ -74,8 +74,8 @@ func DrawChart(path string,records []*Record) error {
 }
 
 func main() {
-	path := flag.String("p","record.json","json path")
-	chartPath := flag.String("chart","chart.png","chart path")
+	path := flag.String("p", "record.json", "json path")
+	chartPath := flag.String("chart", "chart.png", "chart path")
 	flag.Parse()
 
 	records := &[]*Record{}
@@ -93,20 +93,20 @@ func main() {
 	if err != nil {
 		logrus.Fatal(err)
 	}
-	*records = append(*records,&Record{
-		Date:time.Now(),
-		Yesterday:num,
+	*records = append(*records, &Record{
+		Date:      time.Now(),
+		Yesterday: num,
 	})
 	b, err := json.Marshal(records)
 	if err != nil {
 		logrus.Fatal(err)
 	}
-	err = ioutil.WriteFile(*path,b,0644)
+	err = ioutil.WriteFile(*path, b, 0644)
 	if err != nil {
 		logrus.Fatal(err)
 	}
 
-	if len(*records) >1 {
+	if len(*records) > 1 {
 		if err := DrawChart(*chartPath, *records); err != nil {
 			logrus.Fatal(err)
 		}
