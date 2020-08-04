@@ -23,7 +23,7 @@ jobs:
           go-version: '^1.14'
 
       - name: Build KeyFC
-        run: go build -o /usr/bin/keyfc ./
+        run: sudo go build -o /usr/bin/keyfc ./
 
       - name: Checkout public
         uses: actions/checkout@v2
