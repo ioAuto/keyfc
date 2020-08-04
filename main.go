@@ -54,7 +54,7 @@ func checkRange(ts chart.TimeSeries) bool {
 		return false
 	}
 	var last = ts.YValues[0]
-	for i :=1;i<len(ts.YValues);i++ {
+	for i := 1; i < len(ts.YValues); i++ {
 		if ts.YValues[i] != last {
 			return true
 		}
@@ -62,13 +62,13 @@ func checkRange(ts chart.TimeSeries) bool {
 	return false
 }
 
-func timeSeries(records []*Record) (chart.TimeSeries,bool) {
+func timeSeries(records []*Record) (chart.TimeSeries, bool) {
 	ts := chart.TimeSeries{}
 	for i := range records {
 		ts.XValues = append(ts.XValues, records[i].Date.Add(-24*time.Hour))
 		ts.YValues = append(ts.YValues, float64(records[i].Yesterday))
 	}
-	return ts,checkRange(ts)
+	return ts, checkRange(ts)
 }
 
 func DrawChart(path string, records []*Record) error {
