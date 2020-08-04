@@ -52,7 +52,7 @@ func fileExists(filename string) bool {
 func timeSeries(records []*Record) chart.TimeSeries {
 	ts := chart.TimeSeries{}
 	for i := range records {
-		ts.XValues = append(ts.XValues, records[i].Date)
+		ts.XValues = append(ts.XValues, records[i].Date.Add(-24*time.Hour))
 		ts.YValues = append(ts.YValues, float64(records[i].Yesterday))
 	}
 	return ts
