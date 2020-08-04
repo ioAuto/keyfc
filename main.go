@@ -49,19 +49,37 @@ func fileExists(filename string) bool {
 	return !info.IsDir()
 }
 
-func timeSeries(records []*Record) chart.TimeSeries {
+func checkRange(ts chart.TimeSeries) bool {
+	if len(ts.YValues) < 2 {
+		return false
+	}
+	var last = ts.YValues[0]
+	for i :=1;i<len(ts.YValues);i++ {
+		if ts.YValues[i] != last {
+			return true
+		}
+	}
+	return false
+}
+
+func timeSeries(records []*Record) (chart.TimeSeries,bool) {
 	ts := chart.TimeSeries{}
 	for i := range records {
 		ts.XValues = append(ts.XValues, records[i].Date.Add(-24*time.Hour))
 		ts.YValues = append(ts.YValues, float64(records[i].Yesterday))
 	}
-	return ts
+	return ts,checkRange(ts)
 }
 
 func DrawChart(path string, records []*Record) error {
+	ts, ok := timeSeries(records)
+	if !ok {
+		logrus.Warn("zero y-range delta, skipped drawing")
+		return nil
+	}
 	graph := chart.Chart{
 		Series: []chart.Series{
-			timeSeries(records),
+			ts,
 		},
 	}
 	buf := new(bytes.Buffer)
@@ -110,5 +128,7 @@ func main() {
 		if err := DrawChart(*chartPath, *records); err != nil {
 			logrus.Fatal(err)
 		}
+	} else {
+		logrus.Warn("length of records must >1, skipped drawing")
 	}
 }
