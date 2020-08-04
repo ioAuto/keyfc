@@ -58,6 +58,7 @@ func checkRange(ts chart.TimeSeries) bool {
 		if ts.YValues[i] != last {
 			return true
 		}
+		last = ts.YValues[i]
 	}
 	return false
 }
